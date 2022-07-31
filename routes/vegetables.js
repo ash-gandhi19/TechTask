@@ -23,7 +23,7 @@ router.put(
 );
 
 /*To get list of  vegetable data*/
-router.get("/list", vegetablesController.list);
+router.get("/list", isAuthenticated, vegetablesController.list);
 
 /*To get list of  vegetable data by id*/
 router.get("/show/:id", isAuthenticated, vegetablesController.show);

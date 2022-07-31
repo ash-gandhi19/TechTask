@@ -18,7 +18,12 @@ router.put(
   userController.update
 );
 /*To get list of  user data*/
-router.get("/list", permit([roles.Admin]), userController.list);
+router.get(
+  "/list",
+  isAuthenticated,
+  permit([roles.Admin]),
+  userController.list
+);
 
 /*To get list of  user data by id*/
 router.get(
