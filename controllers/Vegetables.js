@@ -96,16 +96,7 @@ module.exports.update = async (req, res) => {
  */
 module.exports.delete = async (req, res) => {
   try {
-    if (req.params.id == req.vegetables.id) {
-      sendJsonResponse(res, 400, {
-        status: "error",
-        message: "Cannot delete your own account",
-      });
-    }
-
-    const vegetables = await Vegetables.findById(req.params.id).select(
-      "-password"
-    );
+    const vegetables = await Vegetables.findById(req.params.id);
 
     if (vegetables) {
       await vegetables.delete();
