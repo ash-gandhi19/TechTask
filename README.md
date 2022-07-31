@@ -5,6 +5,18 @@ Nodejs application with the following features:
 
 Admin user can access all the APIs, Manager user can acess all the API's except user management APIs
 
+Admin Creds:  
+
+   email: jhond@ateam.com
+
+   password: Jhon@1234
+
+Manager Creds:
+
+   email: lilly@ateam.com,
+   
+   password: Lilly@1234,
+
 https://techtask-ateam.herokuapp.com/users/create =>Api for creating admin and manager
 
 https://techtask-ateam.herokuapp.com/login	=>Api For login to app
