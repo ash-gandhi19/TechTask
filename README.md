@@ -19,6 +19,15 @@ Manager Creds:
 
 https://techtask-ateam.herokuapp.com/users/create =>Api for creating admin and manager
 
+Req Example : 
+{
+    "firstname":"Lilly",
+    "lastname":"Doe",
+    "email":"lilly@ateam.com",
+    "password":"Lilly@1234",
+    "role":"Manager"
+}
+
 https://techtask-ateam.herokuapp.com/login	=>Api For login to app
 
 user management APIs (Need Token to access all below api's) 
