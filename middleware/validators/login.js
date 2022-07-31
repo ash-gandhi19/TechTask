@@ -2,12 +2,8 @@ const Joi = require("joi");
 const { toCustomValidationError } = require("../../config/custom_err");
 const { sendJsonResponse } = require("../../config/response_re");
 const schema = Joi.object({
-  email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  password: Joi.string()
-    .pattern(
-      new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})")
-    )
-    .required(),
+  email: Joi.string().required(),
+  password: Joi.string().required(),
 });
 
 module.exports = (req, res, next) => {

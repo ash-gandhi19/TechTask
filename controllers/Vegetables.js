@@ -3,9 +3,6 @@ const { sendJsonResponse } = require("../config/response_re");
 
 /**
  * Create a new vegetables
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.create = async (req, res) => {
   try {
@@ -32,9 +29,6 @@ module.exports.create = async (req, res) => {
 
 /**
  * Returns list of vegetables
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.list = async (req, res) => {
   try {
@@ -50,9 +44,6 @@ module.exports.list = async (req, res) => {
 
 /**
  * Returns a single vegetables
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.show = async (req, res) => {
   try {
@@ -74,9 +65,6 @@ module.exports.show = async (req, res) => {
 
 /**
  * Update a vegetables
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.update = async (req, res) => {
   try {
@@ -107,9 +95,6 @@ module.exports.update = async (req, res) => {
 
 /**
  * Deletes a vegetables
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.delete = async (req, res) => {
   try {

@@ -2,12 +2,9 @@ const User = require("../models/User");
 const { hash } = require("../config/password_util");
 const { sendJsonResponse } = require("../config/response_re");
 const limit_ = 5;
-/**
- * Create a new user
- *
- * @param {object} req
- * @param {object} res
- */
+
+//Create a new user
+
 module.exports.create = async (req, res) => {
   try {
     let user = await User.findOne({ email: req.body.email });
@@ -38,15 +35,11 @@ module.exports.create = async (req, res) => {
 
 /**
  * Returns list of users
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.list = async (req, res) => {
   try {
     let aggregate_options = [];
 
-    //PAGINATION
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || limit_;
 
@@ -61,40 +54,21 @@ module.exports.list = async (req, res) => {
       },
     };
 
-    //FILTERING AND PARTIAL TEXT SEARCH -- FIRST STAGE
     let match = {};
 
-    //filter by name - use $regex in mongodb - add the 'i' flag if you want the search to be case insensitive.
     if (req.query.q) match.firstname = { $regex: req.query.q, $options: "i" };
 
-    //filter by date
-    // if (req.query.date) {
-    //     let d = moment(req.query.date);
-    //     let next_day = moment(d).add(1, 'days'); // add 1 day
-
-    //     match.start_date = {$gte: new Date(d), $lt: new Date(next_day)};
-    // }
-
+    if (req.query.q) match.lastname = { $regex: req.query.q, $options: "i" };
+    if (req.query.q) match.email = { $regex: req.query.q, $options: "i" };
+    if (req.query.q) match.role = { $regex: req.query.q, $options: "i" };
     aggregate_options.push({ $match: match });
 
-    // //GROUPING -- SECOND STAGE
-    // if (req.query.group !== 'false' && parseInt(req.query.group) !== 0) {
-    //     let group = {
-    //         _id: {$dateToString: {format: "%Y-%m-%d", date: "$start_date"}}, // Group By Expression
-    //         data: {$push: "$$ROOT"}
-    //     };
-
-    //     aggregate_options.push({$group: group});
-    // }
-
-    //SORTING -- THIRD STAGE
     let sortOrder =
       req.query.sort_order && req.query.sort_order === "desc" ? -1 : 1;
 
     if (req.query.sortBy && req.query.sortOrder) {
       var sort = {};
       sort[req.query.sortBy] = req.query.sortOrder == "asc" ? 1 : -1;
-      // aggregate_options.push({$sort: {"data.start_date": sortOrder}});
       aggregate_options.push({
         $sort: sort,
       });
@@ -103,15 +77,9 @@ module.exports.list = async (req, res) => {
         $sort: { createdAt: -1 },
       });
     }
-
-    // Set up the aggregation
     const myAggregate = User.aggregate(aggregate_options);
     const users = await User.aggregatePaginate(myAggregate, options);
 
-    // const users = await User.paginate(
-    //   { _id: { $ne: req.user._id } },
-    //   { lean: true }
-    // );
     sendJsonResponse(res, 200, users);
   } catch (error) {
     sendJsonResponse(res, 500, error);
@@ -120,9 +88,6 @@ module.exports.list = async (req, res) => {
 
 /**
  * Returns a single user
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.show = async (req, res) => {
   try {
@@ -136,9 +101,6 @@ module.exports.show = async (req, res) => {
 
 /**
  * Update a user
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.update = async (req, res) => {
   try {
@@ -169,9 +131,6 @@ module.exports.update = async (req, res) => {
 
 /**
  * Deletes a user
- *
- * @param {object} req
- * @param {object} res
  */
 module.exports.delete = async (req, res) => {
   try {

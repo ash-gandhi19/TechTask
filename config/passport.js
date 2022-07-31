@@ -1,44 +1,38 @@
 const LocalStrategy = require("passport-local").Strategy;
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
-const { compare } = require("../config/password_util");
+const { comparepass } = require("./password_util");
 const User = require("../models/User");
 const passport = require("passport");
 
-module.exports = function () {
-  setupLocalStrategy();
-  // setupJwtStrategy();
-
-  passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser(async (id, done) =>
-    done(err, await User.findById(id))
-  );
-};
-
-/**
- * Setup local strategy
- */
-function setupLocalStrategy() {
+module.exports = () => {
   passport.use(
     new LocalStrategy(
       {
         usernameField: "email",
         passwordField: "password",
       },
-      function (email, password, done) {
-        User.findOne({ email: email }, function (err, user) {
-          if (err) {
-            return done(err);
-          }
+      async (email, password, done) => {
+        try {
+          const user = await User.findOne({ email: email }).select("+password");
+
           if (!user) {
-            return done(null, false, { message: "Incorrect username." });
+            return done(null, false, { message: "User not found." });
           }
-          if (!compare(password, user.password)) {
-            return done(null, false, { message: "Incorrect password." });
+
+          const validate = await comparepass(password, user.password);
+
+          if (!validate) {
+            return done(null, false, { message: "Wrong password" });
           }
-          return done(null, user);
-        }).select("+password");
+
+          return done(null, user, { message: "Logged in Successfully" });
+        } catch (error) {
+          return done(error);
+        }
       }
     )
   );
-}
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser(async (id, done) =>
+    done(err, await User.findById(id))
+  );
+};

@@ -17,10 +17,10 @@ module.exports.validatemail = (email) => {
   const domain = getDomain(email);
 
   if (!isFree(domain)) {
-   // console.log(1);
+    // console.log(1);
     return true;
   } else {
-   // console.log(2);
+    // console.log(2);
     return false;
   }
 };

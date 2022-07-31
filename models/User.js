@@ -2,13 +2,11 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { roles } = require("../config/constants");
 const { validatemail } = require("../config/email_validate");
-const mongoosePaginate = require("mongoose-paginate-v2");
-const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 function validatePassword(password) {
   var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
   return re.test(password);
 }
-//------------ User Schema ------------//
 const UserSchema = new mongoose.Schema(
   {
     firstname: {
@@ -52,7 +50,10 @@ const UserSchema = new mongoose.Schema(
 UserSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
     { _id: this._id, email: this.email, role: this.role },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "3h",
+    }
   );
   return token;
 };
@@ -62,7 +63,6 @@ UserSchema.methods.isAdmin = function () {
 };
 
 UserSchema.plugin(aggregatePaginate);
-UserSchema.plugin(mongoosePaginate);
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;

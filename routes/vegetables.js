@@ -5,50 +5,30 @@ const vegetablesValidator = require("../middleware/validators/vegetables");
 const { roles } = require("../config/constants");
 const { permit } = require("../middleware/role");
 const isAuthenticated = require("../middleware/jwt");
-/* GET users listing. */
 
+/*To create vegetable data*/
 router.post(
   "/create",
   isAuthenticated,
   vegetablesValidator,
   vegetablesController.create
 );
+
+/*To update vegetable data*/
 router.put(
   "/update/:id",
   isAuthenticated,
-  // permit([roles.Admin]),
   vegetablesValidator,
   vegetablesController.update
 );
-router.get(
-  "/list",
-  isAuthenticated,
-  // permit([roles.Admin]),
-  vegetablesController.list
-);
 
-router.get(
-  "/show/:id",
-  isAuthenticated,
-  //permit([roles.Admin]),
-  vegetablesController.show
-);
+/*To get list of  vegetable data*/
+router.get("/list", isAuthenticated, vegetablesController.list);
 
-router.delete(
-  "/delete/:id",
-  isAuthenticated,
-  //permit([roles.Admin]),
-  vegetablesController.delete
-);
+/*To get list of  vegetable data by id*/
+router.get("/show/:id", isAuthenticated, vegetablesController.show);
 
-//.route("/")
-
-//.get(userController.list);
-
-// router
-//   .route("/:id")
-//   .put(userValidator, userController.update)
-//   .get(userController.show)
-//   .delete(userController.delete);
+/*To delete vegetable data by id*/
+router.delete("/delete/:id", isAuthenticated, vegetablesController.delete);
 
 module.exports = router;

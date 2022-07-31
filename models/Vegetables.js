@@ -1,7 +1,6 @@
-//importing mongoose
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
-//declaring schema
+
 let VegetableSchema = new mongoose.Schema(
   {
     name: {
@@ -16,7 +15,7 @@ let VegetableSchema = new mongoose.Schema(
     color: { type: String, validate: [isHexColor, "color is not a Hex Color"] },
   },
   {
-    toJSON: { getters: true }, //this right here
+    toJSON: { getters: true },
   },
   { timestamps: true }
 );
@@ -29,4 +28,3 @@ VegetableSchema.plugin(mongoosePaginate);
 const Vegetables = mongoose.model("Vegetables", VegetableSchema);
 
 module.exports = Vegetables;
-//exporting module
