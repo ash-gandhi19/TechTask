@@ -32,11 +32,11 @@ module.exports.create = async (req, res) => {
  */
 module.exports.list = async (req, res) => {
   try {
-    const vegetables = await Vegetables.paginate(
-      { _id: { $ne: req.vegetables._id } },
+    const vegetableslist = await Vegetables.paginate(
+      { _id: { $ne: req.user._id } },
       { lean: true }
     );
-    sendJsonResponse(res, 200, vegetables);
+    sendJsonResponse(res, 200, vegetableslist);
   } catch (error) {
     sendJsonResponse(res, 500, error);
   }
@@ -47,9 +47,7 @@ module.exports.list = async (req, res) => {
  */
 module.exports.show = async (req, res) => {
   try {
-    const vegetables = await Vegetables.findById(req.params.id)
-      .select("-password")
-      .lean();
+    const vegetables = await Vegetables.findById(req.params.id).lean();
     if (vegetables) {
       sendJsonResponse(res, 200, vegetables);
     } else {
